@@ -7,7 +7,7 @@ def bereken_rendement(data: Dict[str, float]) -> Dict:
     huurprijs_later = data['huurprijs_later']
     starttarief = data['starttarief']
     kwhprijs = data['kwhprijs']
-    parkeertarief = 1
+    parkeertarief = data.get('parkeertarief', 1)
     initiële_laadsessies = data['laadsessies']
     kostprijsenergie = data['kostprijsenergie']
     maandgroei = data['maandstijging']
@@ -30,8 +30,8 @@ def bereken_rendement(data: Dict[str, float]) -> Dict:
         energie = sessies_maand * verbruik_per_sessie
 
         omzet = (
-            sessies_dag * 30 * verbruik_per_sessie * kwhprijs +
-            (starttarief + parkeertarief) * sessies_dag * 30
+            sessies_maand * verbruik_per_sessie * kwhprijs +
+            (starttarief + parkeertarief) * sessies_maand
         )
 
         energiekost = energie * kostprijsenergie
@@ -60,8 +60,8 @@ def bereken_rendement(data: Dict[str, float]) -> Dict:
         'capaciteitskost': round(g8 if (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie) > k8 else (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie * 0.35), 2),
         'huurprijs': round(huurprijs, 2),
         'omzet': round(
-            (sessies_rij_46[0] * 30 * verbruik_per_sessie * kwhprijs) +
-            (starttarief + parkeertarief) * sessies_rij_46[0] * 30,
+            (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie * kwhprijs) +
+            (starttarief + parkeertarief) * sessies_rij_46[0] * dagen_per_maand,
         2),
         'rendement_maand_61': round(maandwinsten[60], 2),
         'rendement_12jaar': round(grafiek_data[-1], 2),
