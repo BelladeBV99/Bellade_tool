@@ -1,4 +1,3 @@
-
 from typing import Dict
 
 def bereken_rendement(data: Dict[str, float]) -> Dict:
@@ -8,7 +7,7 @@ def bereken_rendement(data: Dict[str, float]) -> Dict:
     huurprijs_later = data['huurprijs_later']
     starttarief = data['starttarief']
     kwhprijs = data['kwhprijs']
-    parkeertarief = data.get('parkeertarief', 1)
+    parkeertarief = data['parkeertarief']
     laadsessies = data['laadsessies']
     kostprijsenergie = data['kostprijsenergie']
     maandgroei = data['maandstijging']
@@ -29,8 +28,7 @@ def bereken_rendement(data: Dict[str, float]) -> Dict:
         sessies_dag = sessies_rij_46[maand]
         sessies_maand = sessies_dag * dagen_per_maand
         energie = sessies_maand * verbruik_per_sessie
-        omzet = (sessies_maand * verbruik_per_sessie * kwhprijs +
-                 (starttarief + parkeertarief) * sessies_maand)
+        omzet = (energie * kwhprijs) + (starttarief + parkeertarief) * sessies_maand
         energiekost = energie * kostprijsenergie
         capaciteitskost = g8 if energie > k8 else energie * 0.35
         huur = huurprijs if maand < 60 else huurprijs_later
