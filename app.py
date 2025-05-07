@@ -9,9 +9,18 @@ CORS(app)
 def bereken():
     data = request.get_json()
 
-    # Komma naar punt en string naar float conversie
+    # Alleen de benodigde velden behouden en converteren
+    benodigde_keys = [
+        'vermogen', 'opstartkost', 'huurprijs', 'huurprijs_later',
+        'starttarief', 'kwhprijs', 'laadsessies', 'kostprijsenergie',
+        'maandstijging', 'verbruik_per_sessie'
+    ]
+
     try:
-        data = {k: float(str(v).replace(',', '.')) for k, v in data.items()}
+        data = {
+            k: float(str(data.get(k, 0)).replace(',', '.'))
+            for k in benodigde_keys
+        }
     except Exception as e:
         return jsonify({"fout": f"Conversiefout in input: {e}"}), 400
 
