@@ -8,9 +8,11 @@ CORS(app)
 @app.route("/bereken", methods=["POST"])
 def bereken():
     data = request.get_json()
-    keys = ['vermogen', 'opstartkost', 'huurprijs', 'huurprijs_later', 'starttarief',
-            'kwhprijs', 'parkeertarief', 'laadsessies', 'kostprijsenergie',
-            'maandstijging', 'verbruik_per_sessie']
+    keys = [
+        'vermogen', 'opstartkost', 'huurprijs', 'huurprijs_later', 'starttarief',
+        'kwhprijs', 'parkeertarief', 'laadsessies', 'kostprijsenergie',
+        'maandstijging', 'verbruik_per_sessie'
+    ]
     try:
         data = {k: float(str(data.get(k, 0)).replace(',', '.')) for k in keys}
     except Exception as e:
@@ -20,3 +22,4 @@ def bereken():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
