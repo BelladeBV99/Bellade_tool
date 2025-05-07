@@ -8,6 +8,13 @@ CORS(app)
 @app.route("/bereken", methods=["POST"])
 def bereken():
     data = request.get_json()
+
+    # Komma naar punt en string naar float conversie
+    try:
+        data = {k: float(str(v).replace(',', '.')) for k, v in data.items()}
+    except Exception as e:
+        return jsonify({"fout": f"Conversiefout in input: {e}"}), 400
+
     resultaat = bereken_rendement(data)
     return jsonify(resultaat)
 
