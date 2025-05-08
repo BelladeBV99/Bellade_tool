@@ -84,6 +84,7 @@ def bereken_rendement(data):
 
     return {
         'grafiek_data': [round(x, 2) for x in grafiek_data],
+        'sessies_rij': sessies_rij_46,  # ✅ toegevoegd voor frontend maandvergelijking
         'energiehoeveelheid': round(sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie, 2),
         'energiekost': round((sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie) * kostprijsenergie, 2),
         'capaciteitskost': round(g8 if (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie) > k8 else (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie * 0.35), 2),
