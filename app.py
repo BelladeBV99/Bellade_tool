@@ -22,6 +22,7 @@ def bereken():
             'kostprijsenergie': float(data.get('kostprijsenergie', 0)),
             'maandstijging': float(data.get('maandstijging', 0)),
             'verbruik_per_sessie': float(data.get('verbruik_per_sessie', 0)),
+            'commissie': float(data.get('commissie', 0)), 
         }
     except Exception as e:
         return jsonify({"fout": f"Conversiefout in input: {e}"}), 400
@@ -41,6 +42,7 @@ def bereken_rendement(data):
     kostprijsenergie = data['kostprijsenergie']
     maandgroei = data['maandstijging']
     verbruik_per_sessie = data['verbruik_per_sessie']
+    commissie = data['commissie']
 
     dagen_per_maand = 30
     g8 = (50 * vermogen) / 12
@@ -58,10 +60,14 @@ def bereken_rendement(data):
         sessies_maand = sessies_dag * dagen_per_maand
         energie = sessies_maand * verbruik_per_sessie
 
-        omzet = (
+        bruto_omzet = (
             sessies_maand * verbruik_per_sessie * kwhprijs +
             (starttarief + parkeertarief) * sessies_maand
         )
+
+        commissiebedrag = bruto_omzet * (commissie / 100)
+        omzet = bruto_omzet - commissiebedrag
+
 
         energiekost = energie * kostprijsenergie
         capaciteitskost = g8 if energie > k8 else energie * 0.35
@@ -90,9 +96,10 @@ def bereken_rendement(data):
         'capaciteitskost': round(g8 if (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie) > k8 else (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie * 0.35), 2),
         'huurprijs': round(huurprijs, 2),
         'omzet': round(
-            (sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie * kwhprijs) +
-            (starttarief + parkeertarief) * sessies_rij_46[0] * dagen_per_maand,
+            ((sessies_rij_46[0] * dagen_per_maand * verbruik_per_sessie * kwhprijs) +
+            (starttarief + parkeertarief) * sessies_rij_46[0] * dagen_per_maand) * (1 - commissie / 100),
         2),
+
         'rendement_maand_61': round(maandwinsten[60], 2),
         'rendement_12jaar': round(grafiek_data[-1], 2),
         'max_verlies': round(min(grafiek_data), 2),
