@@ -103,7 +103,7 @@ def bereken_rendement(data):
         'rendement_maand_61': round(maandwinsten[60], 2),
         'rendement_12jaar': round(grafiek_data[-1], 2),
         'max_verlies': round(min(grafiek_data), 2),
-        'terugverdentijd': next((i + 1 for i, val in enumerate(grafiek_data) if val >= 0), 144),
+        'terugverdientijd': next((i + 1 for i, val in enumerate(grafiek_data) if val >= 0), 144),
         'rendement_jaarlijks': rendement_jaarlijks_lineair
     }
 
